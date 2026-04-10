@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SCB สร้างสลิป ไทยพาณิชย์ - </title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="icon" href="assets/image/icon/SCB.png" type="image/png">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&display=swap');
+        :root {
+            --bg-main: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+            --sidebar-bg: rgba(15, 23, 42, 0.6);
+            --card-bg: rgba(255, 255, 255, 0.03);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --text-main: #ffffff; 
+            --text-muted: #cbd5e1;
+            --scb-purple: #4e2a84;
+            --scb-purple-hover: #3b1f63;
+            --input-bg: rgba(0, 0, 0, 0.25); 
+            --shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+        }
+        body.theme-pastel {
+            --bg-main: linear-gradient(135deg, #f3f0ff 0%, #e0e7ff 100%);
+            --sidebar-bg: rgba(255, 255, 255, 0.7);
+            --card-bg: rgba(255, 255, 255, 0.8);
+            --card-border: rgba(255, 255, 255, 0.5);
+            --text-main: #2e1065; 
+            --text-muted: #475569;
+            --input-bg: #ffffff;
+            --shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
+        }
+        body { background: var(--bg-main); color: var(--text-main); font-family: 'Kanit', sans-serif; min-height: 100vh; margin: 0; transition: all 0.5s ease; }
+        .slip-shell { display: flex; height: 100vh; overflow: hidden; }
+        
+        .slip-sidebar { width: 250px; display: flex; flex-direction: column; background: var(--sidebar-bg); border-right: 1px solid var(--card-border); backdrop-filter: blur(20px); padding: 15px; overflow-y: auto; flex-shrink: 0; transition: all 0.5s ease;}
+        .slip-main { flex-grow: 1; overflow-y: auto; padding: 15px 25px; }
+        
+        .sidebar-brand img { max-width: 130px; margin-bottom: 25px; width: 100%; object-fit: contain;}
+        .sidebar-menu { display: flex; flex-direction: column; gap: 4px; }
+        .sidebar-link { display: flex !important; flex-direction: row !important; align-items: center !important; gap: 10px !important; color: var(--text-muted); text-decoration: none; padding: 8px 12px; border-radius: 8px; font-weight: 500; font-size: 0.85rem; transition: all 0.3s ease; }
+        .sidebar-link:hover, .sidebar-link.active { background: var(--scb-purple); color: #fff; transform: translateX(4px); }
+        .sidebar-icon-img { width: 18px !important; height: 18px !important; object-fit: contain !important; border-radius: 0 !important; }
+        
+        .slip-navbar { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 12px; backdrop-filter: blur(20px); padding: 8px 15px; margin-bottom: 15px; }
+        
+        .btn-theme-super { background: #ffffff; color: #0f172a; border: 2px solid #ffffff; box-shadow: 0 4px 15px rgba(255,255,255,0.2); transition: all 0.3s ease; font-size: 0.8rem;}
+        .btn-theme-super:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(255,255,255,0.4); background: #f8fafc;}
+        body.theme-pastel .btn-theme-super { background: #0f172a; color: #ffffff; border: 2px solid #0f172a; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+        body.theme-pastel .btn-theme-super:hover { background: #1e293b; box-shadow: 0 6px 20px rgba(0,0,0,0.3); }
+        
+        .form-section-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 12px; padding: 12px 15px; margin-bottom: 10px; backdrop-filter: blur(20px); box-shadow: var(--shadow); }
+        .form-section-title { font-size: 0.9rem; font-weight: 600; color: #a78bfa; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+        .form-label { font-weight: 600; color: var(--text-main); font-size: 0.75rem; margin-bottom: 3px;}
+        .form-control, .form-select { background-color: var(--input-bg); border: 1px solid var(--card-border); color: var(--text-main); border-radius: 8px; padding: 6px 10px; font-size: 0.8rem; transition: all 0.3s; }
+        .form-control:focus, .form-select:focus { background-color: var(--input-bg); border-color: var(--scb-purple); box-shadow: 0 0 0 2px rgba(78, 42, 132, 0.3); color: var(--text-main); }
+        ::placeholder { color: var(--text-muted); opacity: 0.7; font-weight: 400;}
+        
+        .btn-bank-main { background: var(--scb-purple); color: white; padding: 8px; border-radius: 8px; font-weight: 600; font-size: 0.9rem; border: none; transition: all 0.3s; }
+        .btn-bank-main:hover { background: var(--scb-purple-hover); transform: translateY(-2px); box-shadow: 0 5px 15px rgba(78, 42, 132, 0.4); color: white;}
+        
+        .holo-display-wrapper { position: sticky; top: 15px; display: flex; justify-content: center; align-items: center; height: calc(100vh - 100px); perspective: 1000px; }
+        .holo-card { width: 100%; max-width: 480px; background: rgba(255, 255, 255, 0.02); border-radius: 24px; padding: 18px; box-shadow: 0 25px 50px rgba(0,0,0,0.5), inset 0 0 0 1px rgba(255,255,255,0.1), inset 0 0 15px rgba(255,255,255,0.03); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); position: relative; transform-style: preserve-3d; animation: float 6s ease-in-out infinite; transition: all 0.5s ease; }
+        .holo-card::before { content: ''; position: absolute; top: -1px; left: 15%; right: 15%; height: 2px; background: linear-gradient(90deg, transparent, #a855f7, transparent); border-radius: 10px; opacity: 0.8; }
+        .holo-card::after { content: ''; position: absolute; bottom: -15px; left: 15%; right: 15%; height: 8px; background: #a855f7; filter: blur(20px); opacity: 0.4; border-radius: 50%; }
+        
+        @keyframes float { 0% { transform: translateY(0px) rotateX(2deg); } 50% { transform: translateY(-6px) rotateX(-2deg); } 100% { transform: translateY(0px) rotateX(2deg); } }
+        .holo-screen { width: 100%; background: #ffffff; border-radius: 10px; overflow: hidden; box-shadow: 0 8px 20px rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.8); }
+        body.theme-pastel .holo-card { background: rgba(255, 255, 255, 0.5); box-shadow: 0 15px 30px rgba(0,0,0,0.1), inset 0 0 0 1px rgba(255,255,255,0.6); }
+        body.theme-pastel .holo-card::after { opacity: 0.15; }
+        #canvas { width: 100%; height: auto; display: block; object-fit: contain; }
+        
+        .form-switch .form-check-input { width: 2.2em; height: 1.1em; margin-top: 0.1em; background-color: var(--input-bg); border-color: var(--card-border); cursor: pointer; }
+        .form-switch .form-check-input:checked { background-color: var(--scb-purple); border-color: var(--scb-purple); }
+        .alert-custom { background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); color: #fbbf24; border-radius: 8px; padding: 6px 12px; font-size: 0.75rem; margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+<div class="slip-shell">
+  <aside class="slip-sidebar">
+    <div class="sidebar-brand text-center">
+      <img src="assets/image/logo1/logo-h2o.png" alt="Slip H2O">
+    </div>
+    <nav class="sidebar-menu">
+      <a href="https://hy-c9.github.io/Slip-H2o-menu.net/" class="sidebar-link"><i class="bi bi-grid-1x2-fill"></i> หน้าแรก</a>
+      <a href="https://hy-c9.github.io/H2o-slip-kbank.net/" class="sidebar-link"><img src="assets/image/logo1/p-kbank.png" class="sidebar-icon-img"> สลิป กสิกรไทย</a>
+      <a href="slip_scb.php" class="sidebar-link active"><img src="assets/image/logo1/p-scb.png" class="sidebar-icon-img"> สลิป ไทยพาณิชย์</a>
+      <a href="slip_ktb.php" class="sidebar-link"><img src="assets/image/logo1/p-kt.png" class="sidebar-icon-img"> สลิป กรุงไทย</a>
+      <a href="slip_bay.php" class="sidebar-link"><img src="assets/image/logo1/p-kung.png" class="sidebar-icon-img"> สลิป กรุงศรี</a>
+      <a href="slip_bbl.php" class="sidebar-link"><img src="assets/image/logo1/p-bl.png" class="sidebar-icon-img"> สลิป กรุงเทพ</a>
+      <a href="slip_ttb.php" class="sidebar-link"><img src="assets/image/logo1/p-ttb.png" class="sidebar-icon-img"> สลิป TTB</a>
+      <a href="slip_gsb.php" class="sidebar-link"><img src="assets/image/logo1/p-o.png" class="sidebar-icon-img"> สลิป ออมสิน</a>
+      <a href="slip_kkp.php" class="sidebar-link"><img src="assets/image/logo1/p-kpp.png" class="sidebar-icon-img"> สลิป KKP</a>
+      <a href="slip_cimb.php" class="sidebar-link"><img src="assets/image/logo1/p-cimb.png" class="sidebar-icon-img"> สลิป CIMB</a>
+      <a href="slip_baac.php" class="sidebar-link"><img src="assets/image/logo1/p-tks.png" class="sidebar-icon-img"> สลิป ธ.ก.ส.</a>
+      <a href="slip_linebk.php" class="sidebar-link"><img src="assets/image/logo1/p-linebk.png" class="sidebar-icon-img"> สลิป LINE BK</a>
+      <a href="slip_make.php" class="sidebar-link"><img src="assets/image/logo1/p-make.png" class="sidebar-icon-img"> สลิป MAKE</a>
+    </nav>
+    <div class="mt-auto pb-3 pt-4 px-3">
+      <a href="#" class="btn btn-outline-danger btn-sm w-100 rounded-pill mb-2 py-2 fw-medium d-flex justify-content-center align-items-center">
+        <i class="bi bi-headset me-1"></i> ติดต่อผู้ดูแลระบบ
+      </a>
+      <a href="#" onclick="logoutApp()" class="btn btn-theme-super btn-sm w-100 rounded-pill py-2 fw-medium d-flex justify-content-center align-items-center">
+        <i class="bi bi-box-arrow-right me-1"></i> ออกจากระบบ
+      </a>
+    </div>
+  </aside>
+
+  <div class="slip-main">
+    <nav class="navbar navbar-expand-lg slip-navbar d-flex justify-content-between align-items-center">
+      <div class="d-flex align-items-center gap-2">
+        <h5 class="mb-0 fw-bold" style="color: var(--text-main); font-size: 1.05rem;">
+            <img src="assets/image/logo1/p-scb.png" style="width: 22px; margin-right: 5px;"> ระบบสร้างสลิป ไทยพาณิชย์
+        </h5>
+      </div>
+      
+      <div class="d-flex align-items-center gap-3">
+        <div class="d-none d-md-flex align-items-center" style="background: var(--item-bg); border: 1px solid var(--card-border); border-radius: 50rem; padding: 6px 16px; gap: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+            <i class="bi bi-hourglass-split" style="font-size: 1.2rem; color: #f59e0b;"></i>
+            <div class="d-flex flex-column text-start" style="line-height: 1.1;">
+                <span style="font-size: 0.7rem; color: var(--text-muted);">เวลาใช้งานคงเหลือ</span>
+                <span class="fw-bold" id="timeLeftDisplay" style="font-size: 0.85rem; color: var(--text-main);">ทดสอบ VS Code</span>
+            </div>
+        </div>
+
+        <button id="themeToggleBtn" class="btn btn-theme-super rounded-pill px-3 py-1 fw-bold">
+          <i class="bi bi-moon-stars-fill me-1" id="themeIcon"></i> <span id="themeText">โหมดพาสเทล</span>
+        </button>
+      </div>
+    </nav>
+
+    <div class="container-fluid p-0">
+      <div class="row g-3">
+        
+        <div class="col-lg-4">
+            <div class="alert-custom">x-0000ㅤㅤ(10 หลัก) <br> x-0000ㅤㅤ(12 หลัก)<br>xxx-xxx-0000ㅤㅤ(พร้อมเพย์ เบอร์)<br>0-0000-0000x-xx-x ㅤㅤ(พร้อมเพย์บัตรประชาชน)<br>000000000000000 ㅤㅤ(พร้อมเพย์ วอเลท)</div>
+
+            <div class="form-section-card">
+                <div class="form-check form-switch pb-1 mb-0">
+                    <input class="form-check-input" type="checkbox" id="modeSwitch" onchange="toggleMode()">
+                    <label class="form-check-label ms-2" for="modeSwitch" style="color: #a78bfa; font-weight: 600; font-size: 0.85rem; cursor: pointer;">
+                        เปิดโหมดสลิปบันทึกช่วยจำ
+                    </label>
+                </div>
+                <div id="noteOptions" style="display: none; margin-top: 8px; border-top: 1px dashed var(--card-border); padding-top: 10px;">
+                    <div class="row g-2">
+                        <div class="col-md-6">
+                            <label for="AideMemoire" class="form-label text-warning">บันทึกช่วยจำ</label>
+                            <input type="text" class="form-control" id="AideMemoire" value="ค่าอาหาร" oninput="updateDisplay()">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="bg_note" class="form-label text-warning">พื้นหลังโน้ต</label>
+                            <select class="form-select" id="bg_note" onchange="syncNormalBackground(); updateDisplay()">
+                                <option value="assets/image/bs/SCB11T.jpg">สงกรานต์(Songkran)</option>
+                                <option value="assets/image/bs/SCB1T.jpg">ต้นฉบับ</option>
+                                <option value="assets/image/bs/SCB1.1T.jpg">บอลลูน</option>
+                                <option value="assets/image/bs/SCB1.2T.jpg">ม่วงพู</option>
+                                <option value="assets/image/bs/SCB1.3T.jpg">พระพิฆเนศ</option>
+                                <option value="assets/image/bs/SCB1.4T.jpg">แมวหมา</option>
+                                <option value="assets/image/bs/SCB1.5T.jpg">ดอกไม้กระต่าย</option>
+                                <option value="assets/image/bs/SCB1.6.1T.jpg">พระลักษมี และพระพิฆเนศ</option>
+                                <option value="assets/image/bs/SCB1.7.1T.jpg">หนึ่งพันล้านบาท</option>
+                                <option value="assets/image/bs/SCB1.8T.jpg">น้องหมาผู้น่ารัก</option>
+                                <option value="assets/image/bs/SCB1.9T.jpg">Go Astro Boy Go!</option>
+                                <option value="assets/image/bs/SCB1.10T.jpg">องค์พญาครุฑ</option>
+                                <option value="assets/image/bs/SCB1.11T.jpg">เทพเจ้าไฉ่ซิงเอี๊ย</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section-card">
+                <div class="form-section-title"><i class="bi bi-person-lines-fill"></i> ข้อมูลบัญชี</div>
+                <div class="row g-2">
+                    <div class="col-md-6">
+                        <label for="sendername" class="form-label text-success">ผู้โอน</label>
+                        <input type="text" class="form-control mb-2" id="sendername" value="น.ส. ยูรีนา อาดตันตรา" oninput="updateDisplay()">
+                        <input type="text" class="form-control" id="senderaccount" value="xxx-xxx563-2" oninput="updateDisplay()">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="receivername" class="form-label text-primary">ผู้รับโอน</label>
+                        <input type="text" class="form-control mb-2" id="receivername" value="นาย กบ เขียด" oninput="updateDisplay()">
+                        <input type="text" class="form-control mb-2" id="receiveraccount" value="x-5317" oninput="updateDisplay()">
+                        <select class="form-select" id="bank" onchange="autoFormatAccount(); updateDisplay()">
+                            <option value="ไทยพาณิชย์">ธ.ไทยพาณิชย์</option>
+                            <option value="กสิกรไทย">ธ.กสิกรไทย</option>
+                            <option value="กรุงไทย">ธ.กรุงไทย</option>
+                            <option value="กรุงเทพ">ธ.กรุงเทพ</option>
+                            <option value="กรุงศรี">ธ.กรุงศรีอยุธยา</option>
+                            <option value="ทีเอ็มบีธนชาต">ธ.ทีเอ็มบีธนชาต</option>
+                            <option value="ออมสิน">ธ.ออมสิน</option>
+                            <option value="ธ.ก.ส.">ธ.ก.ส.</option>
+                            <option value="อาคารสงเคราะห์">ธ.อาคารสงเคราะห์</option>
+                            <option value="เกียรตินาคินภัทร">ธ.เกียรตินาคินภัทร</option>
+                            <option value="ซีไอเอ็มบีไทย">ธ.ซีไอเอ็มบีไทย</option>
+                            <option value="ยูโอบี">ธ.ยูโอบี</option>
+                            <option value="แลนด์ แอนด์ เฮาส์">ธ.แลนด์ แอนด์ เฮาส์</option>
+                            <option value="ไอซีบีซี">ธ.ไอซีบีซี</option>
+                            <option value="พร้อมเพย์เบอร์">พร้อมเพย์(เบอร์)</option>
+                            <option value="พร้อมเพย์บัตรประชาชน">พร้อมเพย์(บัตรประชาชน)</option>
+                            <option value="พร้อมเพย์ e-Wallet TrueMoney">พร้อมเพย์วอลเล็ท(TrueMoney)</option>
+                            <option value="พร้อมเพย์ e-Wallet Jaew">พร้อมเพย์วอลเล็ท(Jaew)</option>
+                            <option value="พร้อมเพย์ e-Wallet K Plus W">พร้อมเพย์วอลเล็ท(K Plus W)</option>
+                            <option value="MetaAds">MetaAds</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section-card">
+                <div class="form-section-title"><i class="bi bi-clock-history"></i> จำนวนเงิน & เวลา</div>
+                <div class="row g-2">
+                    <div class="col-md-6">
+                        <label for="amount11" class="form-label">จำนวนเงิน (บาท)</label>
+                        <input type="text" class="form-control" id="amount11" value="3,300.00" oninput="updateDisplay()">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="datetime" class="form-label">เวลา (H:M:S)</label>
+                        <input type="datetime-local" class="form-control" id="datetime" step="1" required oninput="updateDisplay()">
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section-card">
+                <div class="form-section-title"><i class="bi bi-palette-fill"></i> ตกแต่ง & QR Code</div>
+                <div class="row g-2">
+                    <div class="col-md-6">
+                        <label for="imageSelect" class="form-label">สติ๊กเกอร์</label>
+                        <select class="form-select" id="imageSelect" onchange="updateDisplay()">
+                            <option value="assets/image/st/NO.png">ไม่ใส่</option>
+                            <option value="assets/image/st/StickerslipSCB1.png">มีความสุข</option>
+                            <option value="assets/image/st/StickerslipSCB2.png">ร้องเพลง</option>
+                            <option value="assets/image/st/StickerslipSCB3.png">หัวใจ</option>
+                            <option value="assets/image/st/StickerslipSCB4.png">ปึ้ง</option>
+                            <option value="assets/image/st/StickerslipSCB5.png">มินิฮาร์ท</option>
+                            <option value="assets/image/st/StickerslipSCB6.png">แบร่ๆ</option>
+                            <option value="assets/image/st/StickerslipSCB7.png">สู้ๆ</option>
+                            <option value="assets/image/st/StickerslipSCB8.png">ไม่ไหวว~</option>
+                            <option value="assets/image/st/StickerslipSCB9.png">นอน</option>
+                            <option value="assets/image/st/StickerslipSCB10.png">จุ๊บ</option>
+                            <option value="assets/image/st/StickerslipSCB11.png">สีขาว(ปิดเลข)</option>
+                            <option value="assets/image/st/StickerslipSCB12.png">สีม่วง(ปิดเลข)</option>
+                            <option value="assets/image/st/StickerslipSCB13.png">สีแดง(ปิดเลข)</option>
+                            <option value="assets/image/st/StickerslipSCB14.png">สีขาว(ปิดเลข)</option>
+                            <option value="assets/image/st/StickerslipSCB15.png">สีขาว(ปิดเลข)</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="backgroundSelect" class="form-label">พื้นหลัง (ปกติ)</label>
+                        <select class="form-select" id="backgroundSelect" onchange="syncNoteBackground(); updateDisplay()">
+                            <option value="assets/image/bs/SCB11.jpg">สงกรานต์(Songkran)</option>
+                            <option value="assets/image/bs/SCB1.jpg">ต้นฉบับ</option>
+                            <option value="assets/image/bs/SCB1.1.jpg">บอลลูน</option>
+                            <option value="assets/image/bs/SCB1.2.jpg">ม่วงพู</option>
+                            <option value="assets/image/bs/SCB1.3.jpg">พระพิฆเนศ</option>
+                            <option value="assets/image/bs/SCB1.4.jpg">แมวหมา</option>
+                            <option value="assets/image/bs/SCB1.5.jpg">ดอกไม้กระต่าย</option>
+                            <option value="assets/image/bs/SCB1.6.1.jpg">พระลักษมี และพระพิฆเนศ</option>
+                            <option value="assets/image/bs/SCB1.7.1.jpg">หนึ่งพันล้านบาท</option>
+                            <option value="assets/image/bs/SCB1.8.jpg">น้องหมาผู้น่ารัก</option>
+                            <option value="assets/image/bs/SCB1.9.jpg">Go Astro Boy Go!</option>
+                            <option value="assets/image/bs/SCB1.10.jpg">องค์พญาครุฑ</option>
+                            <option value="assets/image/bs/SCB1.11.jpg">เทพเจ้าไฉ่ซิงเอี๊ย</option>
+                        </select>
+                    </div>
+                    <div class="col-12 mt-1">
+                        <label for="QRCode" class="form-label">QR Code</label>
+                        <input type="file" class="form-control" id="QRCode" name="QRCode" accept="image/*" onchange="updateDisplay()">
+                    </div>
+                </div>
+            </div>
+
+            <button type="button" class="btn-bank-main w-100 mt-1 mb-4" onclick="downloadImage()">
+                <i class="bi bi-download me-2"></i> DOWNLOAD สลิป
+            </button>
+        </div>
+
+        <div class="col-lg-8 d-none d-lg-block">
+            <div class="holo-display-wrapper">
+                <div class="holo-card">
+                    <div class="holo-screen" id="display">
+                        <canvas id="canvas" width="818" height="1280"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const now = new Date();
+        now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+        document.getElementById('datetime').value = now.toISOString().slice(0, 19);
+        
+        setTimeout(function() {
+            if (typeof updateDisplay === "function") updateDisplay();
+        }, 300);
+    });
+
+    function autoFormatAccount() {
+        const bank = document.getElementById('bank').value;
+        const accInput = document.getElementById('receiveraccount');
+        
+        if (bank === 'ออมสิน' || bank === 'ธ.ก.ส.') {
+            accInput.value = 'x-0000';
+        } else if (bank === 'พร้อมเพย์เบอร์') {
+            accInput.value = 'xxx-xxx-0000';
+        } else if (bank === 'พร้อมเพย์บัตรประชาชน') {
+            accInput.value = '0-0000-0000x-xx-x';
+        } else if (bank.includes('e-Wallet')) {
+            accInput.value = '000000000000000';
+        } else {
+            accInput.value = 'x-5317';
+        }
+    }
+
+    function syncNoteBackground() {
+        const n = document.getElementById('backgroundSelect');
+        const nt = document.getElementById('bg_note');
+        if (n && nt) nt.selectedIndex = n.selectedIndex;
+    }
+    
+    function syncNormalBackground() {
+        const n = document.getElementById('backgroundSelect');
+        const nt = document.getElementById('bg_note');
+        if (n && nt) n.selectedIndex = nt.selectedIndex;
+    }
+    
+    const themeToggleBtn = document.getElementById('themeToggleBtn');
+    const themeIcon = document.getElementById('themeIcon');
+    const themeText = document.getElementById('themeText');
+    const body = document.body;
+
+    themeToggleBtn.addEventListener('click', () => {
+        body.classList.toggle('theme-pastel');
+        if (body.classList.contains('theme-pastel')) {
+            themeIcon.className = 'bi bi-brightness-high-fill me-1';
+            themeText.innerText = "โหมดกลางคืน";
+        } else {
+            themeIcon.className = 'bi bi-moon-stars-fill me-1';
+            themeText.innerText = "โหมดพาสเทล";
+        }
+    });
+
+    window.logoutApp = () => {
+        alert("นี่คือโหมดแก้ไขใน VS Code: การทำงานจำลองการออกจากระบบ");
+    };
+</script>
+
+<script src="js/slipkscb5.js"></script>
+
+<script>
+
+  function toggleMode() {
+    const mc = document.getElementById('modeSwitch');
+    const no = document.getElementById('noteOptions');
+    if (!mc || !no) return;
+    
+    no.style.display = mc.checked ? 'block' : 'none';
+    
+    if(mc.checked) {
+        syncNoteBackground(); 
+    } else {
+        syncNormalBackground();
+    }
+    
+    if (typeof window.updateDisplay === 'function') {
+        window.updateDisplay();
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    const mc = document.getElementById('modeSwitch');
+    const no = document.getElementById('noteOptions');
+    if (mc && no) no.style.display = mc.checked ? 'block' : 'none';
+  });
+  
+  // ป้องกันปัญหา Cache รูปภาพ
+  (function() {
+    const OriginalImage = window.Image;
+    window.Image = function() {
+        const img = new OriginalImage();
+        const originalSet = Object.getOwnPropertyDescriptor(HTMLImageElement.prototype, 'src').set;
+        Object.defineProperty(img, 'src', {
+            set: function(value) {
+                if (value && typeof value === 'string' && value.includes('assets/image/bs/')) {
+                    value = value.split('?')[0] + '?v=' + new Date().getTime();
+                }
+                originalSet.call(this, value);
+            }
+        });
+        return img;
+    };
+  })();
+</script>
+</body>
+</html>
