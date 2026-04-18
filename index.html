@@ -66,11 +66,20 @@
         .holo-card::after { content: ''; position: absolute; bottom: -15px; left: 15%; right: 15%; height: 8px; background: #a855f7; filter: blur(20px); opacity: 0.4; border-radius: 50%; }
         
         @keyframes float { 0% { transform: translateY(0px) rotateX(2deg); } 50% { transform: translateY(-6px) rotateX(-2deg); } 100% { transform: translateY(0px) rotateX(2deg); } }
-        .holo-screen { width: 100%; background: #ffffff; border-radius: 10px; overflow: hidden; box-shadow: 0 8px 20px rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.8); display: flex; justify-content: center; align-items: center; }
+        .holo-screen { 
+    width: max-content; 
+    background: #ffffff; 
+    border-radius: 10px; 
+    overflow: hidden; 
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3); 
+    border: 1px solid rgba(255,255,255,0.8); 
+    display: block; 
+    margin: 0 auto; 
+}
         body.theme-pastel .holo-card { background: rgba(255, 255, 255, 0.5); box-shadow: 0 15px 30px rgba(0,0,0,0.1), inset 0 0 0 1px rgba(255,255,255,0.6); }
         body.theme-pastel .holo-card::after { opacity: 0.15; }
         #canvas { 
-    width: 100%; 
+    width: auto; 
     height: auto; 
     max-height: 70vh; 
     object-fit: contain; 
