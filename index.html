@@ -67,24 +67,24 @@
         
         @keyframes float { 0% { transform: translateY(0px) rotateX(2deg); } 50% { transform: translateY(-6px) rotateX(-2deg); } 100% { transform: translateY(0px) rotateX(2deg); } }
         .holo-screen { 
-    width: max-content; 
-    background: #ffffff; 
-    border-radius: 10px; 
-    overflow: hidden; 
-    box-shadow: 0 8px 20px rgba(0,0,0,0.3); 
-    border: 1px solid rgba(255,255,255,0.8); 
-    display: block; 
-    margin: 0 auto; 
-}
+            width: max-content; 
+            background: #ffffff; 
+            border-radius: 10px; 
+            overflow: hidden; 
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3); 
+            border: 1px solid rgba(255,255,255,0.8); 
+            display: block; 
+            margin: 0 auto; 
+        }
         body.theme-pastel .holo-card { background: rgba(255, 255, 255, 0.5); box-shadow: 0 15px 30px rgba(0,0,0,0.1), inset 0 0 0 1px rgba(255,255,255,0.6); }
         body.theme-pastel .holo-card::after { opacity: 0.15; }
         #canvas { 
-    width: auto; 
-    height: auto; 
-    max-height: 80vh; 
-    object-fit: contain; 
-    display: block; 
-}
+            width: auto; 
+            height: auto; 
+            max-height: 80vh; 
+            object-fit: contain; 
+            display: block; 
+        }
         
         .form-switch .form-check-input { width: 2.2em; height: 1.1em; margin-top: 0.1em; background-color: var(--input-bg); border-color: var(--card-border); cursor: pointer; }
         .form-switch .form-check-input:checked { background-color: var(--scb-purple); border-color: var(--scb-purple); }
@@ -149,6 +149,22 @@
       <div class="row g-3">
         
         <div class="col-lg-4">
+            
+            <div class="d-flex justify-content-between align-items-center mb-2 px-1">
+                <div class="text-warning fw-medium" style="font-size: 0.85rem;"><i class="bi bi-lightning-charge-fill"></i> เมนูด่วน</div>
+                <div class="d-flex gap-2">
+                    <button class="btn btn-sm btn-outline-danger py-1 px-2" style="font-size: 0.75rem;" onclick="clearForm()" title="ล้างค่าทั้งหมด">
+                        <i class="bi bi-trash"></i> ล้าง
+                    </button>
+                    <button class="btn btn-sm btn-outline-primary py-1 px-2" style="font-size: 0.75rem;" onclick="saveFavorite()" title="บันทึกรายการปัจจุบัน">
+                        <i class="bi bi-bookmark-plus"></i> บันทึกไว้
+                    </button>
+                    <button class="btn btn-sm btn-warning py-1 px-2 fw-bold text-dark" style="font-size: 0.75rem;" onclick="loadFavorite()" title="โหลดรายการที่บันทึกไว้">
+                        <i class="bi bi-star-fill"></i> ใช้รายการโปรด
+                    </button>
+                </div>
+            </div>
+
             <div class="alert-custom">x-0000ㅤㅤ(10 หลัก) <br> x-0000ㅤㅤ(12 หลัก)<br>xxx-xxx-0000ㅤㅤ(พร้อมเพย์ เบอร์)<br>0-0000-0000x-xx-x ㅤㅤ(พร้อมเพย์บัตรประชาชน)<br>000000000000000 ㅤㅤ(พร้อมเพย์ วอเลท)</div>
 
             <div class="form-section-card">
@@ -310,14 +326,15 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
+    // ดึงเวลาปัจจุบันใส่ช่องเวลาเมื่อโหลดหน้าเว็บ
     document.addEventListener('DOMContentLoaded', function() {
         const now = new Date();
         now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
         document.getElementById('datetime').value = now.toISOString().slice(0, 19);
         
         setTimeout(function() {
-            if (typeof updateDisplay === "function") updateDisplay();
-        }, 300);
+            if (typeof window.updateDisplay === "function") window.updateDisplay();
+        }, 500);
     });
 
     function autoFormatAccount() {
@@ -364,13 +381,11 @@
             themeText.innerText = "โหมดพาสเทล";
         }
     });
-
 </script>
 
 <script src="js/slipkscb5.js"></script>
 
 <script>
-
   function toggleMode() {
     const mc = document.getElementById('modeSwitch');
     const no = document.getElementById('noteOptions');
@@ -412,8 +427,85 @@
         return img;
     };
   })();
-  
+
+  // --------------------------------------------------------
+  // ฟังก์ชัน: การจัดการ เมนูด่วน (Clear / Save / Load)
+  // --------------------------------------------------------
+  const STORAGE_KEY = 'slipFav_SCB_1';
+
+  window.clearForm = function() {
+      document.getElementById('AideMemoire').value = 'ค่าอาหาร';
+      document.getElementById('sendername').value = 'น.ส. ยูรีนา อาดตันตรา';
+      document.getElementById('senderaccount').value = 'xxx-xxx563-2';
+      document.getElementById('receivername').value = 'นาย กบ เขียด';
+      document.getElementById('receiveraccount').value = 'x-5317';
+      document.getElementById('amount11').value = '3,300.00';
+      document.getElementById('bank').selectedIndex = 0; // ธนาคารไทยพาณิชย์
+      document.getElementById('imageSelect').selectedIndex = 0;
+      document.getElementById('backgroundSelect').selectedIndex = 0;
+      
+      // รีเซ็ตสวิตช์โหมด
+      const mc = document.getElementById('modeSwitch');
+      if(mc && mc.checked) {
+          mc.checked = false;
+          toggleMode();
+      }
+      
+      // รีเซ็ตเวลา
+      const now = new Date();
+      now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+      document.getElementById('datetime').value = now.toISOString().slice(0, 19);
+      
+      if(window.updateDisplay) window.updateDisplay();
+  };
+
+  window.saveFavorite = function() {
+      const favData = {
+          noteMode: document.getElementById('modeSwitch').checked,
+          noteText: document.getElementById('AideMemoire').value,
+          bgNote: document.getElementById('bg_note').value,
+          sName: document.getElementById('sendername').value,
+          sAccount: document.getElementById('senderaccount').value,
+          rName: document.getElementById('receivername').value,
+          rAccount: document.getElementById('receiveraccount').value,
+          bank: document.getElementById('bank').value,
+          amount: document.getElementById('amount11').value,
+          sticker: document.getElementById('imageSelect').value,
+          bgNormal: document.getElementById('backgroundSelect').value
+      };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(favData));
+      alert('⭐ บันทึกรายการนี้เป็น "รายการโปรด" เรียบร้อยแล้ว!');
+  };
+
+  window.loadFavorite = function() {
+      const savedStr = localStorage.getItem(STORAGE_KEY);
+      if (savedStr) {
+          const favData = JSON.parse(savedStr);
+          
+          if(favData.noteMode !== undefined) {
+              document.getElementById('modeSwitch').checked = favData.noteMode;
+              toggleMode();
+          }
+          if(favData.noteText) document.getElementById('AideMemoire').value = favData.noteText;
+          if(favData.bgNote) document.getElementById('bg_note').value = favData.bgNote;
+          
+          if(favData.sName) document.getElementById('sendername').value = favData.sName;
+          if(favData.sAccount) document.getElementById('senderaccount').value = favData.sAccount;
+          if(favData.rName) document.getElementById('receivername').value = favData.rName;
+          if(favData.rAccount) document.getElementById('receiveraccount').value = favData.rAccount;
+          
+          if(favData.bank) document.getElementById('bank').value = favData.bank;
+          if(favData.amount) document.getElementById('amount11').value = favData.amount;
+          if(favData.sticker) document.getElementById('imageSelect').value = favData.sticker;
+          if(favData.bgNormal) document.getElementById('backgroundSelect').value = favData.bgNormal;
+          
+          if(window.updateDisplay) window.updateDisplay();
+      } else {
+          alert('⚠️ คุณยังไม่ได้บันทึกรายการโปรด');
+      }
+  };
 </script>
+
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
